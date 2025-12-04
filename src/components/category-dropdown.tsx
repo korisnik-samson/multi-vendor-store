@@ -16,6 +16,8 @@ const CategoryDropdown = ({ category, isActive, isNavigationHovered }: CategoryD
         if (dropdownRef.current) setIsOpen(true);
     }
 
+    /* Add onClick handlers for touch devices and support for keystrokes */
+
     const onMouseLeave = () => setIsOpen(false);
     const dropdownPosition = getDropdownPosition();
 

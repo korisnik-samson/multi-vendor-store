@@ -11,9 +11,17 @@ import sharp from 'sharp'
 import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
 import { Categories } from "./collections/Categories";
+import { connectionCredentials } from "@/lib/utils";
+
+import dotenv from "dotenv"
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+// Load environment variables from .env file because it's not included in Next.js build and a standalone app.
+dotenv.config({
+    path: path.resolve(dirname, '../.env')
+})
 
 export default buildConfig({
     admin: {
@@ -24,12 +32,12 @@ export default buildConfig({
     },
     collections: [Users, Media, Categories],
     editor: lexicalEditor(),
-    secret: process.env.PAYLOAD_SECRET || '',
+    secret: process.env.NEXT_PUBLIC_PAYLOAD_SECRET! || connectionCredentials.payloadSecret!,
     typescript: {
         outputFile: path.resolve(dirname, 'payload-types.ts'),
     },
     db: mongooseAdapter({
-        url: process.env.DATABASE_URI || '',
+        url: process.env.NEXT_PUBLIC_DATABASE_URI! || connectionCredentials.mongodbUri!,
     }),
     sharp,
     plugins: [

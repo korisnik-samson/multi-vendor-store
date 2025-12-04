@@ -28,7 +28,7 @@ const Layout = async ({ children }: Props) => {
 
     const formatedData = data.docs.map((doc: any) => ({
         ...doc,
-        subcategories: (doc.subcategories?.docs ?? []).map((doc) => ({
+        subcategories: (doc.subcategories?.docs ?? []).map((doc: Category) => ({
             // due to the fact we only have a depth of 1, dos is the Category
             ...(doc as Category),
             subcategories: undefined
@@ -39,7 +39,7 @@ const Layout = async ({ children }: Props) => {
         <div className='flex flex-col min-h-screen'>
             <Navbar />
             <SearchFilters data={formatedData} />
-            <div className='flex-1 bg-[#F4F4F0]'>{children}</div>
+            <div className='flex-1 bg-[#F2F2E6]'>{children}</div>
             <Footer />
         </div>
     );
