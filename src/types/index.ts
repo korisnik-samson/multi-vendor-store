@@ -1,6 +1,7 @@
 import React from "react";
 import { Category } from "@/payload-types";
 import { CustomCategory } from "@/app/(app)/(home)/types";
+import { CategoriesGetManyOutput } from "@/modules/categories/types";
 
 export interface NavbarItemProps {
     href: string;
@@ -30,32 +31,32 @@ export interface NavBarSidebarProps {
 }*/
 
 export interface SearchFiltersProps {
-    data: CustomCategory[];
+    data: CategoriesGetManyOutput;
 }
 
 export interface SearchInputProps {
     disabled?: boolean;
-    data: CustomCategory[];
+    data?: CategoriesGetManyOutput;
 }
 
 export interface CategoriesProps {
-    data: any
+    data: CategoriesGetManyOutput
 }
 
 export interface CategoryDropdownProps {
-    category: CustomCategory;
+    category: CategoriesGetManyOutput[1];
     isActive?: boolean;
     isNavigationHovered: boolean;
 }
 
 export interface SubCategoryMenuProps {
-    category: CustomCategory;
+    category: CategoriesGetManyOutput[1];
     isOpen: boolean;
     position: { top: number; left: number;}
 }
 
 export interface CategoriesSidebarProps {
-    data?: CustomCategory[]; // remove this later
+    data?: CategoriesGetManyOutput; // remove this later because data is already fetched in the parent component
     open: boolean
     onOpenChange: (open: boolean) => void
 }

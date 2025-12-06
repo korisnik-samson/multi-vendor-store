@@ -1,46 +1,40 @@
-import React from 'react'
-import configPromise from '@payload-config';
+import React, { Suspense } from 'react'
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
-import { getPayload } from 'payload';
 import { Navbar } from '@/components/navbar';
 import { Footer } from '@/components/footer';
-import SearchFilters from "./search-filters";
-import { Category } from '@/payload-types';
-import { CustomCategory } from "@/app/(app)/(home)/types";
+import { SearchFilters, SearchFiltersSkeleton } from "./search-filters";
+import { getQueryClient, trpc } from "@/trpc/server";
 
 interface Props {
     children?: React.ReactNode;
 }
 
 const Layout = async ({ children }: Props) => {
-    const payload = await getPayload({
-        config: configPromise,
-    });
+    const queryClient = getQueryClient();
 
-    const data = await payload.find({
-        collection: 'categories',
-        depth: 1, // populate one level of subcategories
-        where: {
-            parent: {
-                exists: false, // Fetch only top-level categories
-            },
-        },
-        sort: "name"
-    });
-
-    const formatedData: CustomCategory[] = data.docs.map((doc: any) => ({
-        ...doc,
-        subcategories: (doc.subcategories?.docs ?? []).map((doc: Category) => ({
-            // due to the fact we only have a depth of 1, dos is the Category
-            ...(doc as Category),
-            subcategories: undefined
-        })),
-    }));
+    void queryClient.prefetchQuery(
+        trpc.categories.getMany.queryOptions()
+    )
 
     return (
         <div className='flex flex-col min-h-screen'>
             <Navbar />
-            <SearchFilters data={formatedData} />
+
+            {/* Being explicit about the query client state*/}
+            <HydrationBoundary state={dehydrate(queryClient)}>
+                <Suspense fallback={<SearchFiltersSkeleton />}>
+                    <SearchFilters />
+                </Suspense>
+            </HydrationBoundary>
+
+            {/* Or use the client-side query client, but just uncomment this and the two function exports in server.tsx from trpc/server to enable it*/}
+            {/*<HydrationClient>
+                <Suspense fallback={<div>Loading...</div>}>
+                    <SearchFilters />
+                </Suspense>
+            </HydrationClient>*/}
+
             <div className='flex-1 bg-[#F2F2E6]'>{children}</div>
             <Footer />
         </div>

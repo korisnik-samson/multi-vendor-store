@@ -2,15 +2,20 @@ import React, { useState } from 'react'
 import { CategoriesSidebarProps } from "@/types";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { CustomCategory } from "@/app/(app)/(home)/types";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useTRPC } from "@/trpc/client";
+import { useQuery } from "@tanstack/react-query";
+import { CategoriesGetManyOutput, CategoriesGetManyOutputsSingle } from "@/modules/categories/types";
 
-export const CategoriesSidebar = ({ open, onOpenChange, data }: CategoriesSidebarProps) => {
+export const CategoriesSidebar = ({ open, onOpenChange, /*data*/ }: CategoriesSidebarProps) => {
+    const trpc = useTRPC();
+    const { data } = useQuery(trpc.categories.getMany.queryOptions())
+
     const router = useRouter();
 
-    const [parentCategories, setParentCategories] = useState<CustomCategory[] | null>(null);
-    const [selectedCategories, setSelectedCategories] = useState<CustomCategory | null>(null);
+    const [parentCategories, setParentCategories] = useState<CategoriesGetManyOutput | null>(null);
+    const [selectedCategories, setSelectedCategories] = useState<CategoriesGetManyOutput[1] | null>(null);
 
     // if parent categories, show it, else show root categories
     const currentCategories = parentCategories ?? data ?? [];
@@ -21,9 +26,9 @@ export const CategoriesSidebar = ({ open, onOpenChange, data }: CategoriesSideba
         onOpenChange(open);
     }
 
-    const handleCategoryClick = (category: CustomCategory) => {
+    const handleCategoryClick = (category: CategoriesGetManyOutput[1]) => {
         if (category.subcategories && category.subcategories.length > 0) {
-            setParentCategories(category.subcategories as CustomCategory[]);
+            setParentCategories(category.subcategories as CategoriesGetManyOutput);
             setSelectedCategories(category);
 
         } else {
@@ -65,7 +70,8 @@ export const CategoriesSidebar = ({ open, onOpenChange, data }: CategoriesSideba
                             <ChevronLeftIcon className='size-4 mr-2' /> Back
                         </button>
                     )}
-                    {currentCategories.map((category: CustomCategory) => (
+                    {/* TODO: Look out for this CategoriesGetManyOutput*/}
+                    {currentCategories.map((category: CategoriesGetManyOutputsSingle) => (
                         <button key={category.slug} onClick={() => {handleCategoryClick(category)}}
                                 className='w-full text-left p-4 hover:bg-black hover:text-white flex justify-between items-center text-base font-medium cursor-pointer'>
                             {category.name}

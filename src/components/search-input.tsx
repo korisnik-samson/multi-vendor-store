@@ -6,13 +6,14 @@ import { ListFilterIcon, SearchIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { CategoriesSidebar } from "@/components/categories-sidebar";
 import { Button } from "@/components/ui/button";
+import { useTRPC } from "@/trpc/client";
 
-const SearchInput = ({ disabled, data }: SearchInputProps) => {
+const SearchInput = ({ disabled }: SearchInputProps) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
     return (
         <div className='flex items-center gap-2 w-full'>
-            <CategoriesSidebar open={isSidebarOpen} onOpenChange={setIsSidebarOpen} data={data}/>
+            <CategoriesSidebar open={isSidebarOpen} onOpenChange={setIsSidebarOpen} />
             
             <div className='relative w-full'>
                 <SearchIcon className='absolute left-3 top-1/2 -translate-y-1/2 size-4 text-neutral-500' />
