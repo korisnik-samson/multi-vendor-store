@@ -1,6 +1,5 @@
 import React from "react";
 import { Category } from "@/payload-types";
-import { CustomCategory } from "@/app/(app)/(home)/types";
 import { CategoriesGetManyOutput } from "@/modules/categories/types";
 
 export interface NavbarItemProps {
