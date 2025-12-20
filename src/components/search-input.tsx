@@ -2,14 +2,18 @@
 
 import React, { useState } from 'react'
 import { SearchInputProps } from "@/types";
-import { ListFilterIcon, SearchIcon } from "lucide-react";
+import { BookmarkCheckIcon, ListFilterIcon, SearchIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { CategoriesSidebar } from "@/components/categories-sidebar";
 import { Button } from "@/components/ui/button";
 import { useTRPC } from "@/trpc/client";
+import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
 
 const SearchInput = ({ disabled }: SearchInputProps) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+    const trpc = useTRPC();
+    const session = useQuery(trpc.auth.session.queryOptions())
 
     return (
         <div className='flex items-center gap-2 w-full'>
@@ -20,12 +24,18 @@ const SearchInput = ({ disabled }: SearchInputProps) => {
                 <Input className='pl-8' placeholder='Search Products' disabled={disabled} />
             </div>
 
-            {/* categories view all button */}
             <Button variant='elevated' className='size-12 shrink-0 flex lg:hidden'
                 onClick={() => setIsSidebarOpen(true)}>
                 <ListFilterIcon />
             </Button>
-
+            {session.data?.user && (
+                <Button asChild variant='elevated'>
+                    <Link href='/library'>
+                        <BookmarkCheckIcon />
+                        Library
+                    </Link>
+                </Button>
+            )}
             {/* TODO: Add library button */}
         </div>
     );

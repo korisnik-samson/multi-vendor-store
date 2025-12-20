@@ -4,7 +4,7 @@ import React from 'react'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,7 +16,6 @@ import { Poppins } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { useTRPC } from "@/trpc/client";
 import { useRouter } from "next/navigation";
-import ScrambledText from "@/components/ui/scrambled-text";
 import TextType from "@/components/ui/text-type";
 
 const poppins = Poppins({
@@ -27,10 +26,13 @@ const poppins = Poppins({
 export const SignInView = () => {
     const router = useRouter();
     const trpc = useTRPC();
+    const queryClient = useQueryClient();
 
     const login = useMutation(trpc.auth.login.mutationOptions({
-        onSuccess: () => {
+        onSuccess: async() => {
             toast.success("Log in successful");
+            await queryClient.invalidateQueries(trpc.auth.session.queryFilter());
+
             router.push('/');
         },
         onError: (error) => toast.error(error.message)
@@ -45,9 +47,7 @@ export const SignInView = () => {
         }
     });
 
-    const onSubmit = (values: z.infer<typeof loginSchema>) => {
-        login.mutate(values);
-    }
+    const onSubmit = (values: z.infer<typeof loginSchema>) => login.mutate(values);
 
     return (
         <div className='grid grid-cols-1 lg:grid-cols-5'>

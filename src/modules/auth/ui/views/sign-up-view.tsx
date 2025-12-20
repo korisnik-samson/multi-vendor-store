@@ -4,7 +4,7 @@ import React from 'react'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,10 +26,13 @@ const poppins = Poppins({
 export const SignUpView = () => {
     const router = useRouter();
     const trpc = useTRPC();
+    const queryClient = useQueryClient();
 
     const register = useMutation(trpc.auth.register.mutationOptions({
-        onSuccess: () => {
+        onSuccess: async() => {
             toast.success("Account created successfully!");
+            await queryClient.invalidateQueries(trpc.auth.session.queryFilter());
+
             router.push('/');
         },
         onError: (error) => toast.error(error.message)
@@ -45,9 +48,7 @@ export const SignUpView = () => {
         }
     });
 
-    const onSubmit = (values: z.infer<typeof registerSchema>) => {
-        register.mutate(values);
-    }
+    const onSubmit = (values: z.infer<typeof registerSchema>) => register.mutate(values);
 
     const username: string = form.watch('username');
     const usernameErrors: FieldError | undefined = form.formState.errors.username;

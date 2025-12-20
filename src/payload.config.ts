@@ -31,6 +31,7 @@ export default buildConfig({
         },
     },
     collections: [Users, Media, Categories],
+    // cookiePrefix: 'biblioteka',
     editor: lexicalEditor(),
     secret: process.env.NEXT_PUBLIC_PAYLOAD_SECRET! || connectionCredentials.payloadSecret!,
     typescript: {
