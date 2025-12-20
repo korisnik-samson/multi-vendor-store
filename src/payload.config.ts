@@ -15,8 +15,8 @@ import { connectionCredentials } from "@/lib/utils";
 
 import dotenv from "dotenv"
 
-const filename = fileURLToPath(import.meta.url)
-const dirname = path.dirname(filename)
+const filename: string = fileURLToPath(import.meta.url)
+const dirname: string = path.dirname(filename)
 
 // Load environment variables from .env file because it's not included in Next.js build and a standalone app.
 dotenv.config({
