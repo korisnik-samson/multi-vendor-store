@@ -1,6 +1,7 @@
 import React from "react";
 import { Category } from "@/payload-types";
 import { CategoriesGetManyOutput } from "@/modules/categories/types";
+import { PromiseExecutor } from "@trpc/server/unstable-core-do-not-import";
 
 export interface NavbarItemProps {
     href: string;
@@ -58,4 +59,21 @@ export interface CategoriesSidebarProps {
     data?: CategoriesGetManyOutput; // remove this later because data is already fetched in the parent component
     open: boolean
     onOpenChange: (open: boolean) => void
+}
+
+export interface CategoryProps {
+    params: Promise<{ category: string }>
+}
+
+export interface SubCategoryProps {
+    params: Promise<{
+        category: string;
+        subcategory: string;
+    }>
+}
+
+export interface BreadcrumbsNaviagtionProps {
+    activeCategoryName?: string | null;
+    activeCategory?: string | null;
+    activeSubcategoryName?: string | null;
 }

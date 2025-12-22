@@ -15,8 +15,8 @@ export const NavbarSidebar = ({ items, open, onOpenChange }: NavBarSidebarProps)
                 </SheetHeader>
 
                 <ScrollArea className='flex flex-col overflow-y-auto h-full pb-2'>
-                    {items.map((item) => (
-                        <Link key={items.href} href={item.href} className='w-full text-left p-4 hover:bg-black hover:text-white flex items-center text-base font-medium'>
+                    {items.map((item, key) => (
+                        <Link key={key} href={item.href} className='w-full text-left p-4 hover:bg-black hover:text-white flex items-center text-base font-medium'>
                             {item.children}
                         </Link>
                     ))}

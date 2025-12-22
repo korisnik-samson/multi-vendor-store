@@ -44,7 +44,7 @@ export const Navbar = () => {
     const session = useQuery(trpc.auth.session.queryOptions());
 
     return (
-        <nav className='h-20 flex border-b justify-between font-medium bg-white'>
+        <nav className='h-20 flex border-b justify-between font-medium bg-gree-400'>
             <Link href='/' className='pl-6 flex items-center'>
                 <span className={cn("text-5xl font-semibold", poppins.className)}>
                     bltka.
@@ -63,17 +63,26 @@ export const Navbar = () => {
 
             {session.data?.user ? (
                 <div className='hidden lg:flex'>
-                    <Button asChild variant='secondary' className='border-l border-t-0 border-r-0 border-b-0 px-12 h-full rounded-none bg-black text-white hover:bg-pink-400 hover:text-black transition-colors text-lg'>
-                        <Link href='/admin'>Dashboard</Link>
+                    <Button asChild variant='secondary' className='border-l border-t-0 border-r-0 border-b-0 px-12 h-full
+                        rounded-none bg-black text-white hover:bg-pink-400 hover:text-black transition-colors text-lg'>
+                        <Link href='/admin'>
+                            Dashboard
+                        </Link>
                     </Button>
                 </div>
             ) : (
                 <div className='hidden lg:flex'>
-                    <Button asChild variant='secondary' className='border-l border-t-0 border-r-0 border-b-0 px-12 h-full rounded-none bg-white hover:bg-pink-400 transition-colors text-lg'>
-                        <Link prefetch href='/sign-in'>Log in</Link>
+                    <Button asChild variant='secondary' className='border-l border-t-0 border-r-0 border-b-0 px-12 h-full rounded-none
+                        bg-white hover:bg-pink-400 transition-colors text-lg'>
+                        <Link prefetch href='/sign-in'>
+                            Log in
+                        </Link>
                     </Button>
-                    <Button asChild variant='secondary' className='border-l border-t-0 border-r-0 border-b-0 px-12 h-full rounded-none bg-black text-white hover:bg-pink-400 hover:text-black transition-colors text-lg'>
-                        <Link prefetch href='/sign-up'>Start Selling</Link>
+                    <Button asChild variant='secondary' className='border-l border-t-0 border-r-0 border-b-0 px-12 h-full rounded-none
+                        bg-black text-white hover:bg-pink-400 hover:text-black transition-colors text-lg'>
+                        <Link prefetch href='/sign-up'>
+                            Start Selling
+                        </Link>
                     </Button>
                 </div>
             )}
