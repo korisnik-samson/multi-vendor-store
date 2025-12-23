@@ -67,6 +67,7 @@ export interface CategoryProps {
 
 export interface SubcategoryProps {
     params: Promise<{ subcategory: string }>
+    searchParams: Promise<SearchParams>
 }
 
 export interface SubCategoryProps {
@@ -102,4 +103,19 @@ export interface PriceFilterProps {
 export interface TagsFilterProps {
     value?: string[] | null;
     onChange: (value: string[]) => void;
+}
+
+export interface ProductCardProps {
+    id: string;
+    name: string;
+    imageUrl?: string | null;
+    authorUsername: string;
+    authorImageUrl?: string | null;
+    reviewRating: number;
+    reviewCount: number;
+    price: number;
+}
+
+export interface ProductListViewProps {
+    category?: string;
 }

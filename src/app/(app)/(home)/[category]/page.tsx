@@ -2,10 +2,8 @@ import React from 'react'
 import { CategoryProps } from "@/types";
 import { trpc, getQueryClient } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { ProductList, ProductListSkeleton } from "@/components/product-list";
-import { ProductFilters } from "@/components/product-filters";
 import { loadProductFilters } from "@/modules/products/search-params";
-import { ProductSort } from "@/components/product-sort";
+import { ProductListView } from "@/components/views/product-list-view";
 
 const Page = async ({ params, searchParams }: CategoryProps) => {
     const { category } = await params;
@@ -20,25 +18,7 @@ const Page = async ({ params, searchParams }: CategoryProps) => {
 
     return (
         <HydrationBoundary state={dehydrate(queryClient)}>
-            <div className='px-4 lg:px-12 py-8 flex flex-col gap-4'>
-                <div className='flex flex-col lg:flex-row lg:items-center gap-y-2 lg:gap-y-0 justify-between'>
-                    <p className='text-2xl font-medium'>Curated for you</p>
-                    <ProductSort />
-                </div>
-
-                <div className='grid grid-cols-1 lg:grid-cols-6 xl:grid-cols-8 gap-y-6 gap-x-12'>
-                    <div className='lg:col-span-2 xl:col-span-2'>
-                        <ProductFilters />
-                    </div>
-
-                    <div className='lg:col-span-4 xl:col-span-6'>
-                        <React.Suspense fallback={<ProductListSkeleton />}>
-                            <ProductList category={category} />
-                        </React.Suspense>
-                    </div>
-                </div>
-            </div>
-
+            <ProductListView category={category} />
         </HydrationBoundary>
     );
 }
