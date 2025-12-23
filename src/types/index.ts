@@ -1,7 +1,6 @@
 import React from "react";
-import { Category } from "@/payload-types";
 import { CategoriesGetManyOutput } from "@/modules/categories/types";
-import { PromiseExecutor } from "@trpc/server/unstable-core-do-not-import";
+import { SearchParams } from "nuqs/server";
 
 export interface NavbarItemProps {
     href: string;
@@ -63,6 +62,7 @@ export interface CategoriesSidebarProps {
 
 export interface CategoryProps {
     params: Promise<{ category: string }>
+    searchParams: Promise<SearchParams>
 }
 
 export interface SubcategoryProps {
@@ -97,4 +97,9 @@ export interface PriceFilterProps {
     maxPrice?: string | null;
     onMinPriceChange: (minPrice: string | null) => void;
     onMaxPriceChange: (maxPrice: string | null) => void;
+}
+
+export interface TagsFilterProps {
+    value?: string[] | null;
+    onChange: (value: string[]) => void;
 }

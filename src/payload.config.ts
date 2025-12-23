@@ -12,8 +12,9 @@ import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
 import { Categories } from "./collections/Categories";
 import { Products } from "./collections/Products";
-import { connectionCredentials } from "@/lib/utils";
+import { Tags } from "@/collections/Tags";
 
+import { connectionCredentials } from "@/lib/utils";
 import dotenv from "dotenv"
 
 const filename: string = fileURLToPath(import.meta.url)
@@ -31,7 +32,7 @@ export default buildConfig({
             baseDir: path.resolve(dirname),
         },
     },
-    collections: [Users, Media, Categories, Products],
+    collections: [Users, Media, Categories, Products, Tags],
     // cookiePrefix: 'biblioteka',
     editor: lexicalEditor(),
     secret: process.env.NEXT_PUBLIC_PAYLOAD_SECRET! || connectionCredentials.payloadSecret!,
