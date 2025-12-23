@@ -85,3 +85,16 @@ export interface BreadcrumbsNavigationProps {
 export interface ProductListProps {
     category?: string;
 }
+
+export interface ProductFilterProps {
+    title: string;
+    className?: string;
+    children: React.ReactNode;
+}
+
+export interface PriceFilterProps {
+    minPrice?: string | null;
+    maxPrice?: string | null;
+    onMinPriceChange: (minPrice: string | null) => void;
+    onMaxPriceChange: (maxPrice: string | null) => void;
+}

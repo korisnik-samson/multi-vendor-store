@@ -69,7 +69,7 @@ export const SignInView = () => {
                         </div>
 
                         <TextType text={["Dobrodošli nazad u Biblioteku"]} typingSpeed={65} className='text-4xl font-medium'
-                            pauseDuration={12000} showCursor={true} cursorCharacter= {'\u258E'} />
+                            pauseDuration={12000} showCursor={true} cursorCharacter={'\u258E'} />
 
                         {/*<h1 className='text-4xl font-medium'>
 

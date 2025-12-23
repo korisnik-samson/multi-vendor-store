@@ -20,7 +20,7 @@ export const categoriesRouter = createTRPCRouter({
             subcategories: (doc.subcategories?.docs ?? []).map((doc: CategoriesGetManyOutput[1]) => ({
                 // due to the fact we only have a depth of 1, dos is the Category
                 ...(doc as CategoriesGetManyOutput[1]),
-                subcategories: undefined
+                // subcategories: undefined
             })),
         }));
     })
