@@ -74,6 +74,9 @@ export const Categories = ({ data }: CategoriesProps) => {
             {/* Visible categories */}
             <div ref={containerRef} className="flex flex-nowrap items-center"
                  onMouseEnter={() => setIsAnyHovered(true)} onMouseLeave={() => setIsAnyHovered(false)}>
+
+                {/* TODO: Hardcoded "All" button */}
+
                 {data.slice(0, visibleCount).map((category: any) => (
                     <div key={category.id}>
                         <CategoryDropdown category={category} isActive={activeCategory === category.slug} isNavigationHovered={isAnyHovered} />

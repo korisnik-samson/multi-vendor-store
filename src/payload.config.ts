@@ -11,6 +11,7 @@ import sharp from 'sharp'
 import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
 import { Categories } from "./collections/Categories";
+import { Products } from "./collections/Products";
 import { connectionCredentials } from "@/lib/utils";
 
 import dotenv from "dotenv"
@@ -30,7 +31,7 @@ export default buildConfig({
             baseDir: path.resolve(dirname),
         },
     },
-    collections: [Users, Media, Categories],
+    collections: [Users, Media, Categories, Products],
     // cookiePrefix: 'biblioteka',
     editor: lexicalEditor(),
     secret: process.env.NEXT_PUBLIC_PAYLOAD_SECRET! || connectionCredentials.payloadSecret!,

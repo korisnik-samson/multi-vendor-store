@@ -2,9 +2,9 @@ import React from 'react'
 import Link from 'next/link'
 
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
-import { BreadcrumbsNaviagtionProps } from "@/types";
+import { BreadcrumbsNavigationProps } from "@/types";
 
-export const BreadcrumbNavigation = ({ activeCategoryName, activeCategory, activeSubcategoryName }: BreadcrumbsNaviagtionProps) => {
+export const BreadcrumbNavigation = ({ activeCategoryName, activeCategory, activeSubcategoryName }: BreadcrumbsNavigationProps) => {
     if (!activeCategoryName || activeCategory === "all") return null;
 
     return (
@@ -26,7 +26,7 @@ export const BreadcrumbNavigation = ({ activeCategoryName, activeCategory, activ
 
                         <BreadcrumbItem>
                             <BreadcrumbPage className='text-xl font-medium'>
-                                    {activeSubcategoryName}
+                                {activeSubcategoryName}
                             </BreadcrumbPage>
                         </BreadcrumbItem>
                     </React.Fragment>

@@ -65,6 +65,10 @@ export interface CategoryProps {
     params: Promise<{ category: string }>
 }
 
+export interface SubcategoryProps {
+    params: Promise<{ subcategory: string }>
+}
+
 export interface SubCategoryProps {
     params: Promise<{
         category: string;
@@ -72,8 +76,12 @@ export interface SubCategoryProps {
     }>
 }
 
-export interface BreadcrumbsNaviagtionProps {
+export interface BreadcrumbsNavigationProps {
     activeCategoryName?: string | null;
     activeCategory?: string | null;
     activeSubcategoryName?: string | null;
+}
+
+export interface ProductListProps {
+    category?: string;
 }

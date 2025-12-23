@@ -2,7 +2,9 @@ import type { CollectionConfig } from "payload";
 
 export const Categories: CollectionConfig = {
     slug: "categories",
-
+    admin: {
+        useAsTitle: "name",
+    },
     /*access: {
         read: ({ req }) => req.user.isAdmin,
         create: ({ req }) => req.user.isAdmin,
