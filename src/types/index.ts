@@ -1,6 +1,6 @@
 import React from "react";
 import { CategoriesGetManyOutput } from "@/modules/categories/types";
-import { SearchParams } from "nuqs/server";
+import type { SearchParams } from "nuqs/server";
 
 export interface NavbarItemProps {
     href: string;
@@ -84,7 +84,9 @@ export interface BreadcrumbsNavigationProps {
 }
 
 export interface ProductListProps {
+    tenantSubdomain?: string;
     category?: string;
+    narrowView?: boolean;
 }
 
 export interface ProductFilterProps {
@@ -109,13 +111,29 @@ export interface ProductCardProps {
     id: string;
     name: string;
     imageUrl?: string | null;
-    authorUsername: string;
-    authorImageUrl?: string | null;
+    tenantSubDomain: string;
+    tenantImageUrl?: string | null;
     reviewRating: number;
     reviewCount: number;
     price: number;
 }
 
 export interface ProductListViewProps {
+    tenantSubdomain?: string;
     category?: string;
+    narrowView?: boolean;
+}
+
+export interface TenantsPageProps {
+    searchParams: Promise<SearchParams>;
+    params: Promise<{ subdomain: string }>;
+}
+
+export interface TenantLayoutProps {
+    children: React.ReactNode;
+    params: Promise<{ subdomain: string }>;
+}
+
+export interface TenantsNavbarProps {
+    subdomain: string;
 }

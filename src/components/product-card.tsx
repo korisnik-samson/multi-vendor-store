@@ -2,8 +2,20 @@ import Link from "next/link";
 import Image from "next/image";
 import { ProductCardProps } from "@/types";
 import { StarIcon } from "lucide-react";
+import React from "react";
+import { useRouter } from "next/navigation";
+import { generateTenantURL } from "@/lib/utils";
 
-export const ProductCard = ({ id, name, imageUrl, authorImageUrl, authorUsername, reviewRating, reviewCount, price }: ProductCardProps) => {
+export const ProductCard = ({ id, name, imageUrl, tenantImageUrl, tenantSubDomain, reviewRating, reviewCount, price }: ProductCardProps) => {
+    const router = useRouter();
+
+    const handleUserClick = (event: React.MouseEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        router.push(generateTenantURL(tenantSubDomain))
+    }
+
     return (
         <Link href={`/product/${id}`}>
             <div className="hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow border rounded-md bg-white overflow-hidden h-full flex flex-col">
@@ -14,12 +26,12 @@ export const ProductCard = ({ id, name, imageUrl, authorImageUrl, authorUsername
                     <h2 className='text-lg font-medium line-clamp-4'>{name}</h2>
 
                     {/* TODO: Redirect to user shop */}
-                    <div className='flex items-center gap-2' onClick={() => {}}>
-                        {authorImageUrl && (
-                            <Image src={authorImageUrl} alt={authorUsername}
+                    <div className='flex items-center gap-2' onClick={handleUserClick}>
+                        {tenantImageUrl && (
+                            <Image src={tenantImageUrl} alt={tenantSubDomain}
                                    width={16} height={16} className='rounded-full border shrink-0 size-[16px]' />
                         )}
-                        <p className='text-sm underline font-medium'>{authorUsername}</p>
+                        <p className='text-sm underline font-medium'>{tenantSubDomain}</p>
                     </div>
 
                     {reviewCount > 0 && (

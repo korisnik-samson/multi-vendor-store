@@ -28,3 +28,7 @@ export const formatAsCurrency = (value: string) => {
 
     }).format(numberValue);
 }
+
+export function generateTenantURL(tenantSubdomain: string) {
+    return `/tenants/${tenantSubdomain}`
+}
