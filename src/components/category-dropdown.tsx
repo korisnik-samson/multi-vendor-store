@@ -11,7 +11,7 @@ import Link from "next/link";
 const CategoryDropdown = ({ category, isActive, isNavigationHovered }: CategoryDropdownProps) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
-    const { getDropdownPosition } = useDropdownPosition(dropdownRef);
+    // const { getDropdownPosition } = useDropdownPosition(dropdownRef);
 
     const onMouseEnter = () => {
         if (dropdownRef.current) setIsOpen(true);
@@ -23,7 +23,6 @@ const CategoryDropdown = ({ category, isActive, isNavigationHovered }: CategoryD
     };
 
     const onMouseLeave = () => setIsOpen(false);
-    const dropdownPosition = getDropdownPosition();
 
     return (
         <div className='relative' ref={dropdownRef} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} /*onClick={toggleDropdown}*/>
@@ -45,7 +44,7 @@ const CategoryDropdown = ({ category, isActive, isNavigationHovered }: CategoryD
                 )}
             </div>
 
-            <SubCategoryMenu category={category} isOpen={isOpen} position={dropdownPosition}/>
+            <SubCategoryMenu category={category} isOpen={isOpen} />
         </div>
     );
 }

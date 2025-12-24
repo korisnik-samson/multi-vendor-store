@@ -1,6 +1,18 @@
 import { getPayload } from "payload"
 import config from "@/payload.config"
 
+import dotenv from "dotenv"
+import { fileURLToPath } from "url";
+import path from "path";
+
+const filename: string = fileURLToPath(import.meta.url)
+const dirname: string = path.dirname(filename)
+
+// Load environment variables from .env file because it's not included in Next.js build and a standalone app.
+dotenv.config({
+    path: path.resolve(dirname, '../../.env')
+})
+
 const categories = [
     {
         name: "All",
@@ -138,7 +150,33 @@ const categories = [
 ]
 
 const seed = async () => {
-    const payload = await getPayload({ config })
+    const payload = await getPayload({ config });
+
+    // create super-admin tenant
+    const adminTenant = await payload.create({
+        collection: "tenants",
+        data: {
+            name: "admin",
+            subdomain: "admin",
+            stripeAccountId: "admin",
+        }
+    })
+
+    // create super-admin user
+    await payload.create({
+        collection: "users",
+        data: {
+            email: process.env.NEXT_PUBLIC_SUPERADMIN_EMAIL!,
+            password: process.env.NEXT_PUBLIC_SUPERADMIN_PASSWORD!,
+            roles: ['super-admin'],
+            username: 'admin',
+            tenants: [
+                {
+                    tenant: adminTenant.id,
+                }
+            ]
+        }
+    })
 
     for (const category of categories) {
         const parentCategory = await payload.create({

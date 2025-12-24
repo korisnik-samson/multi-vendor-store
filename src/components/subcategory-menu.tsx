@@ -3,15 +3,15 @@ import { SubCategoryMenuProps } from "@/types";
 import { Category } from "@/payload-types";
 import Link from "next/link";
 
-export const SubCategoryMenu = ({ category, isOpen, position }: SubCategoryMenuProps) => {
+export const SubCategoryMenu = ({ category, isOpen }: SubCategoryMenuProps) => {
     if (!isOpen || !category.subcategories || category.subcategories.length === 0) return null;
 
     const backgroundColor = category.color || "#F5F5F5"
 
     return (
-        <div className='fixed z-100' style={{
-            top: position.top,
-            left: position.left,
+        <div className='absolute z-100' style={{
+            top: "100%",
+            left: 0,
         }}>
             {/* Invisible bridge to maintain hover*/}
             <div className="h-3 wi-60" />

@@ -51,7 +51,7 @@ export interface CategoryDropdownProps {
 export interface SubCategoryMenuProps {
     category: CategoriesGetManyOutput[1];
     isOpen: boolean;
-    position: { top: number; left: number;}
+    // position: { top: number; left: number;}
 }
 
 export interface CategoriesSidebarProps {
