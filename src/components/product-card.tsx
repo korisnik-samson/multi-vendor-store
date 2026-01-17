@@ -4,7 +4,7 @@ import { ProductCardProps } from "@/types";
 import { StarIcon } from "lucide-react";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { generateTenantURL } from "@/lib/utils";
+import { formatCurrency, generateTenantURL } from "@/lib/utils";
 
 export const ProductCard = ({ id, name, imageUrl, tenantImageUrl, tenantSubDomain, reviewRating, reviewCount, price }: ProductCardProps) => {
     const router = useRouter();
@@ -17,7 +17,7 @@ export const ProductCard = ({ id, name, imageUrl, tenantImageUrl, tenantSubDomai
     }
 
     return (
-        <Link href={`/product/${id}`}>
+        <Link href={`${generateTenantURL(tenantSubDomain)}/products/${id}`}>
             <div className="hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow border rounded-md bg-white overflow-hidden h-full flex flex-col">
                 <div className='relative aspect-square'>
                     <Image src={imageUrl || "/placeholder.png"} alt={name} fill className='object-cover' />
@@ -44,11 +44,7 @@ export const ProductCard = ({ id, name, imageUrl, tenantImageUrl, tenantSubDomai
                 <div className='p-4'>
                     <div className='relative px-2 py-1 border bg-pink-400 w-fit'>
                         <p className='text-sm font-medium'>
-                            {new Intl.NumberFormat("sr-RS", {
-                                style: "currency",
-                                currency: "RSD",
-                                minimumFractionDigits: 2,
-                            }).format(Number(price))}
+                            {formatCurrency(price)}
                         </p>
                     </div>
                 </div>

@@ -1,10 +1,10 @@
-import { ProductListView } from "@/components/views/product-list-view";
-import { loadProductFilters } from "@/modules/products/search-params";
-
-import { getQueryClient, trpc } from "@/trpc/server";
-import { DEFAULT_LIMIT } from "@/constants";
-
 import React from 'react'
+import { ProductListView } from "@/components/views/product-list-view";
+
+import { loadProductFilters } from "@/modules/products/search-params";
+import { getQueryClient, trpc } from "@/trpc/server";
+
+import { DEFAULT_LIMIT } from "@/constants";
 import { TenantsPageProps } from "@/types";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
@@ -22,7 +22,7 @@ const Page = async ({ params, searchParams }: TenantsPageProps) => {
 
     return (
         <HydrationBoundary state={dehydrate(queryClient)}>
-            <ProductListView tenantSubdomain={subdomain} narrowView/>
+            <ProductListView tenantSubdomain={subdomain} narrowView />
         </HydrationBoundary>
     );
 }

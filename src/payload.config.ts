@@ -18,6 +18,7 @@ import { Tenants } from "@/collections/Tenants";
 
 import { connectionCredentials } from "@/lib/utils";
 import dotenv from "dotenv"
+import { Config } from "@/payload-types";
 
 const filename: string = fileURLToPath(import.meta.url)
 const dirname: string = path.dirname(filename)
@@ -47,7 +48,7 @@ export default buildConfig({
     sharp,
     plugins: [
         payloadCloudPlugin(),
-        multiTenantPlugin({
+        multiTenantPlugin<Config>({
             collections: {
                 products: {}
             },

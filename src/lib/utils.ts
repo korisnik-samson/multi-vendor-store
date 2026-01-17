@@ -32,3 +32,11 @@ export const formatAsCurrency = (value: string) => {
 export function generateTenantURL(tenantSubdomain: string) {
     return `/tenants/${tenantSubdomain}`
 }
+
+export function formatCurrency(value: number | string) {
+    return new Intl.NumberFormat("sr-RS", {
+        style: "currency",
+        currency: "RSD",
+        minimumFractionDigits: 2,
+    }).format(Number(value))
+}

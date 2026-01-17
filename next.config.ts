@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
     /* config options here */
-    allowedDevOrigins: ['local-origin.dev', '*.local-origin.dev', '192.168.1.4:3000'],
+    allowedDevOrigins: ['local-origin.dev', '*.local-origin.dev', '192.168.1.4', '192.168.50.153'],
 };
 
 export default withPayload(nextConfig);

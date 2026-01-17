@@ -137,3 +137,19 @@ export interface TenantLayoutProps {
 export interface TenantsNavbarProps {
     subdomain: string;
 }
+
+export interface ProductPageProps {
+    params: Promise<{ productId: string; slug: string }>;
+}
+
+export interface ProductViewProps {
+    productId: string;
+    tenantSubdomain?: string;
+}
+
+export interface StarRatingProps {
+    rating: number;
+    className?: string;
+    iconClassName?: string;
+    text?: string;
+}

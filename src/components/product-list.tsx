@@ -3,7 +3,7 @@
 import React from "react";
 
 import { useTRPC } from "@/trpc/client";
-import { useSuspenseInfiniteQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseInfiniteQuery, /*useSuspenseQuery*/ } from "@tanstack/react-query";
 import { ProductListProps } from "@/types";
 import { useProductFilters } from "@/modules/products/hooks/use-product-filters";
 import { ProductCard, ProductCardSkeleton } from "@/components/product-card";
