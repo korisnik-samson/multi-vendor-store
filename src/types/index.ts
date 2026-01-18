@@ -134,6 +134,11 @@ export interface TenantLayoutProps {
     params: Promise<{ subdomain: string }>;
 }
 
+export interface CheckoutLayoutProps {
+    children: React.ReactNode;
+    params: Promise<{ subdomain: string }>;
+}
+
 export interface TenantsNavbarProps {
     subdomain: string;
 }
@@ -176,4 +181,31 @@ export interface CheckoutButtonProps {
     classname?: string;
     hideIfEmpty?: boolean;
     tenantSubdomain: string;
+}
+
+export interface CheckoutPageProps {
+    params: Promise<{ subdomain: string }>;
+}
+
+export interface CheckoutViewProps {
+    tenantSubdomain: string;
+}
+
+export interface CheckoutItemProps {
+    isLast?: boolean;
+    imageUrl?: string | null;
+    name: string;
+    productUrl: string;
+    tenantUrl: string;
+    tenantName: string;
+    id?: string;
+    price: number;
+    onRemove: () => void;
+}
+
+export interface CheckoutSidebarProps {
+    total: number;
+    onCheckout: () => void;
+    isCancelled?: boolean;
+    isPending?: boolean;
 }
