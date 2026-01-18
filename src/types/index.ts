@@ -139,12 +139,12 @@ export interface TenantsNavbarProps {
 }
 
 export interface ProductPageProps {
-    params: Promise<{ productId: string; slug: string }>;
+    params: Promise<{ productId: string; subdomain: string }>;
 }
 
 export interface ProductViewProps {
     productId: string;
-    tenantSubdomain?: string;
+    tenantSubdomain: string;
 }
 
 export interface StarRatingProps {
@@ -152,4 +152,28 @@ export interface StarRatingProps {
     className?: string;
     iconClassName?: string;
     text?: string;
+}
+
+export interface TenantCartProps {
+    productIds: string[];
+}
+
+export interface CartStateProps {
+    tenantCarts: Record<string, TenantCartProps>;
+    addProduct: (tenantSubdomain: string, productId: string) => void;
+    removeProduct: (tenantSubdomain: string, productId: string) => void;
+    clearCart: (tenantSubdomain: string) => void;
+    clearAllCarts: () => void;
+    getCartByTenant: (tenantSubdomain: string) => string[];
+}
+
+export interface CartButtonProps {
+    tenantSubdomain: string;
+    productId: string;
+}
+
+export interface CheckoutButtonProps {
+    classname?: string;
+    hideIfEmpty?: boolean;
+    tenantSubdomain: string;
 }

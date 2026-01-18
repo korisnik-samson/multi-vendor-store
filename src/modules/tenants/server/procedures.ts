@@ -10,6 +10,14 @@ export const tenantsRouter = createTRPCRouter({
             subdomain: z.string()
         })
     ).query(async ({ ctx, input }) => {
+
+        if (!input.subdomain) {
+            throw new TRPCError({
+                code: 'BAD_REQUEST',
+                message: 'Subdomain is required'
+            });
+        }
+
         const tenantsData = await ctx.db.find({
             collection: 'tenants',
             depth: 2,

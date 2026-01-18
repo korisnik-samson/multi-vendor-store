@@ -6,16 +6,16 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { ProductView } from '@/components/product-view';
 
 const Page = async ({ params }: ProductPageProps) => {
-    const { productId, slug } = await params;
+    const { productId, subdomain } = await params;
     const queryClient = getQueryClient();
 
     void queryClient.prefetchQuery(trpc.tenants.getOne.queryOptions({
-        subdomain: slug
+        subdomain
     }));
 
     return (
         <HydrationBoundary state={dehydrate(queryClient)}>
-            <ProductView productId={productId} tenantSubdomain={slug} />
+            <ProductView productId={productId} tenantSubdomain={subdomain} />
         </HydrationBoundary>
     );
 }

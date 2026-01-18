@@ -19,8 +19,8 @@ const poppins = Poppins({
 
 const NavbarItem = ({ href, children, isActive }: NavbarItemProps) => {
     return (
-        <Button asChild variant='outline' className={cn('bg-transparent hover:bg-transparent rounded-xl hover:border-primary border-transparent px-3.5 text-lg', isActive && 'bg-black' +
-            ' text-white hover:bg-black hover:text-white')}>
+        <Button asChild variant='outline' className={cn('bg-transparent hover:bg-transparent rounded-xl hover:border-primary border-transparent px-3.5 text-lg',
+            isActive && 'bg-black text-white hover:bg-black hover:text-white')}>
             <Link href={href}>
                 {children}
             </Link>

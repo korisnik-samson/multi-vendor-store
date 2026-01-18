@@ -21,6 +21,7 @@ const Page = async ({ params, searchParams }: TenantsPageProps) => {
     }));
 
     return (
+        // Dehydration problems here
         <HydrationBoundary state={dehydrate(queryClient)}>
             <ProductListView tenantSubdomain={subdomain} narrowView />
         </HydrationBoundary>
