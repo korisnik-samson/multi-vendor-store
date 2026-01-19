@@ -3,7 +3,7 @@ import { createJSONStorage, persist} from "zustand/middleware";
 import { CartStateProps } from "@/types";
 
 export const useCartStore = create<CartStateProps>() (
-    persist((set, get) => ({
+    persist((set) => ({
         tenantCarts: {},
         addProduct: (tenantSubdomain, productId) => set((state) => ({
             tenantCarts: {
@@ -37,7 +37,7 @@ export const useCartStore = create<CartStateProps>() (
         clearAllCarts: () => set({
             tenantCarts: {}
         }),
-        getCartByTenant: (tenantSubdomain) => get().tenantCarts[tenantSubdomain]?.productIds || [],
+        // getCartByTenant: (tenantSubdomain) => get().tenantCarts[tenantSubdomain]?.productIds || [],
     }),
     {
         name: 'biblioteka-cart',

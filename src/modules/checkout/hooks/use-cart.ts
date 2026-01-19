@@ -1,30 +1,45 @@
 import { useCartStore } from "@/modules/checkout/store/use-cart-store";
+import { useCallback } from "react";
+import { useShallow } from "zustand/react/shallow";
 
 export const useCart = (tenantSubdomain: string) => {
-    const { getCartByTenant, addProduct, removeProduct, clearCart, clearAllCarts } = useCartStore();
-    const productIds = getCartByTenant(tenantSubdomain);
+    const addProduct = useCartStore((state) => state.addProduct);
+    const removeProduct = useCartStore((state) => state.removeProduct);
+    const clearCart = useCartStore((state) => state.clearCart);
+    const clearAllCarts = useCartStore((state) => state.clearAllCarts);
 
-    const toggleProduct = (productId: string) => {
+    const productIds = useCartStore(useShallow((state) => state.tenantCarts[tenantSubdomain]?.productIds || []));
+
+    const toggleProduct = useCallback((productId: string) => {
         if (productIds.includes(productId)) removeProduct(tenantSubdomain, productId);
         else addProduct(tenantSubdomain, productId);
-    };
 
-    const isProductInCart = (productId: string) => {
+    }, [addProduct, removeProduct, productIds, tenantSubdomain]);
+
+    const isProductInCart = useCallback((productId: string) => {
         return productIds.includes(productId);
-    }
+    }, [productIds]);
 
-    const clearTenantCart = () => {
+    const clearTenantCart = useCallback(() => {
         return clearCart(tenantSubdomain);
-    }
+    }, [tenantSubdomain, clearCart]);
+
+    const handleAddProduct = useCallback((productId: string) => {
+        addProduct(tenantSubdomain, productId)
+    }, [addProduct, tenantSubdomain]);
+
+    const handleRemoveProduct = useCallback((productId: string) => {
+        removeProduct(tenantSubdomain, productId)
+    }, [removeProduct, tenantSubdomain])
 
     return {
         productIds,
-        addProduct: (productIds: string) => addProduct(tenantSubdomain, productIds),
-        removeProduct: (productIds: string) => removeProduct(tenantSubdomain, productIds),
+        addProduct: handleAddProduct,
+        removeProduct: handleRemoveProduct,
         clearCart: clearTenantCart,
         clearAllCarts,
         toggleProduct,
         isProductInCart,
         totalItems: productIds.length
     };
-}
+};

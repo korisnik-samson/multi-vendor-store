@@ -171,10 +171,11 @@ export interface CartStateProps {
     removeProduct: (tenantSubdomain: string, productId: string) => void;
     clearCart: (tenantSubdomain: string) => void;
     clearAllCarts: () => void;
-    getCartByTenant: (tenantSubdomain: string) => string[];
+    // getCartByTenant: (tenantSubdomain: string) => string[];
 }
 
 export interface CartButtonProps {
+    isPurchased?: boolean;
     tenantSubdomain: string;
     productId: string;
 }
@@ -230,4 +231,8 @@ export type ExpandedLineItem = Stripe.LineItem & {
             metadata: ProductMetadata;
         };
     }
+}
+
+export interface LibraryViewProps {
+
 }
