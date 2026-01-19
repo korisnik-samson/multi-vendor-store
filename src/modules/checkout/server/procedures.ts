@@ -1,16 +1,117 @@
-import { baseProcedure, createTRPCRouter } from "@/trpc/init";
+import { baseProcedure, createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { z } from "zod";
 
 import { Category, Media, Tenant } from "@/payload-types";
 import { TRPCError } from "@trpc/server";
+import Stripe from "stripe";
+import { CheckoutMetadata, ProductMetadata } from "@/types";
+import { stripe } from "@/lib/stripe";
+import { headers as getHeaders } from "next/dist/server/request/headers";
 
 export const checkoutRouter = createTRPCRouter({
+    purchase: protectedProcedure.input(
+        z.object({
+            productIds: z.array(z.string()).min(1),
+            tenantSubdomain: z.string().min(1)
+        })
+    ).mutation(async ({ ctx, input }) => {
+        const products = await ctx.db.find({
+            collection: 'products',
+            depth: 2,
+            where: {
+                and: [
+                    {
+                        id: {
+                            in: input.productIds
+                        }
+                    },
+                    {
+                        'tenant.subdomain': {
+                            equals: input.tenantSubdomain
+                        }
+                    }
+                ]
+            }
+        })
+
+        if (products.totalDocs !== input.productIds.length) throw new TRPCError({
+            code: 'NOT_FOUND',
+            message: 'Some products were not found'
+        });
+
+        const tenantsData = await ctx.db.find({
+            collection: 'tenants',
+            limit: 1,
+            pagination: false,
+            where: {
+                subdomain: {
+                    equals: input.tenantSubdomain
+                }
+            }
+        });
+
+        const tenant = tenantsData.docs[0];
+
+        if (!tenant) throw new TRPCError({
+            code: 'NOT_FOUND',
+            message: 'Tenant not found'
+        });
+
+        // TODO: Throw error if stripe details aren't submitted
+
+        const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = products.docs.map((product) => ({
+            quantity: 1,
+            price_data: {
+                unit_amount: Math.round((product.price / 140.6027) * 100), // Stripe expects cents and we convert to british pounds
+                currency: 'gbp' ,
+                product_data: {
+                    name: product.name,
+                    metadata: {
+                        stripeAccountId: tenant.stripeAccountId,
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+
+                    } as ProductMetadata
+                }
+            }
+        }));
+
+        const headers = await getHeaders();
+
+        const host = headers.get("host");
+        const protocol = process.env.NODE_ENV === "development" ? "http" : "https";
+
+        const origin = `${protocol}://${host}`;
+
+        const checkout = await stripe.checkout.sessions.create({
+            customer_email: ctx.session.user.email || undefined,
+
+            // success_url: `${process.env.NEXT_PUBLIC_APP_URL}/tenants/${input.tenantSubdomain}/checkout?success=true`,
+            success_url: `${origin}/tenants/${input.tenantSubdomain}/checkout?success=true`,
+
+            // cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/tenants/${input.tenantSubdomain}/checkout?cancel=true`,
+            cancel_url: `${origin}/tenants/${input.tenantSubdomain}/checkout?cancel=true`,
+
+            mode: 'payment',
+            line_items: lineItems,
+            invoice_creation: { enabled: true },
+            metadata: { userId: ctx.session.user.id } as CheckoutMetadata,
+            // payment_method_types: ['card', 'amazon_pay'],
+        });
+
+        if (!checkout) throw new TRPCError({
+            code: 'INTERNAL_SERVER_ERROR',
+            message: 'Failed to create checkout session'
+        });
+
+        return { url: checkout.url, }
+    }),
     getProducts: baseProcedure.input(
         z.object({
             ids: z.array(z.string()),
         })
     ).query(async ({ ctx, input }) => {
-
         const data = await ctx.db.find({
             collection: 'products',
             depth: 2, // populate one level of categories and images and tenants and tenant images

@@ -3,28 +3,62 @@
 import { CheckoutViewProps } from "@/types";
 import { useTRPC } from "@/trpc/client";
 import { useCart } from "@/modules/checkout/hooks/use-cart";
-import { useQuery } from "@tanstack/react-query";
-import React, { useEffect } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { generateTenantURL } from "@/lib/utils";
 import { CheckoutItem } from "@/components/checkout-item";
 import { CheckoutSidebar } from "@/components/checkout-sidebar";
 import { InboxIcon, LoaderIcon, ShoppingCartIcon } from "lucide-react";
+import { useCheckoutStates } from "@/modules/checkout/hooks/use-checkout-states";
+import { useRouter } from "next/navigation";
 
 export const CheckoutView = ({ tenantSubdomain }: CheckoutViewProps) => {
-    const { productIds, clearAllCarts, removeProduct } = useCart(tenantSubdomain);
+    const router = useRouter();
+
+    const [states, setStates] = useCheckoutStates();
+    const { productIds, removeProduct, clearCart } = useCart(tenantSubdomain);
     const trpc = useTRPC();
 
     const { data, error, isLoading } = useQuery(trpc.checkout.getProducts.queryOptions({
         ids: productIds
     }));
 
+    const purchase = useMutation(trpc.checkout.purchase.mutationOptions({
+        onMutate: () => {
+            setStates({ cancel: false, success: false })
+        },
+        onSuccess: (data) => {
+            // @ts-ignore
+            window.location.href = data.url;
+        },
+        onError: (error) => {
+            // TODO: Modify when subdomains are enabled
+            if (error.data?.code === "UNAUTHORIZED") router.push("/sign-in");
+
+            toast.error(error.message)
+        },
+    }));
+
+    useEffect(() => {
+        if (states.success) {
+            toast.success("Your order was successfully placed");
+            setStates({ cancel: false, success: false });
+
+            clearCart();
+
+            // TODO: Invalidate library cache
+
+            router.push("/products");
+        }
+    }, [states.success, clearCart, router, setStates]);
+
     useEffect(() => {
         if (error?.data?.code === "NOT_FOUND") {
-            clearAllCarts();
+            clearCart();
             toast.warning("Your cart is empty. Some products were not found.");
         }
-    }, [error]);
+    }, [error, clearCart]);
 
     if (isLoading) return (
         <div className='lg:pt-16 pt-4 px-4 lg:px-12'>
@@ -58,7 +92,9 @@ export const CheckoutView = ({ tenantSubdomain }: CheckoutViewProps) => {
                 </div>
 
                 <div className='lg:col-span-3'>
-                    <CheckoutSidebar total={data?.totalPrice || 0} onCheckout={() => {}} isCancelled={false} isPending={false} />
+                    <CheckoutSidebar total={data?.totalPrice || 0}
+                                     onPurchase={() => purchase.mutate({ tenantSubdomain, productIds })}
+                                     isCanceled={states.cancel} disabled={purchase.isPending} />
                 </div>
             </div>
         </div>
