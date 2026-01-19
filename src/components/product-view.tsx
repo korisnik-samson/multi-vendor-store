@@ -2,7 +2,7 @@
 
 // TODO: Add real ratings
 
-import React from "react";
+import React, { useState } from "react";
 
 import { ProductViewProps } from "@/types";
 import Image from "next/image";
@@ -11,12 +11,13 @@ import dynamic from "next/dynamic";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { formatCurrency, generateTenantURL } from "@/lib/utils";
 import Link from "next/link";
-import { LinkIcon, StarIcon } from "lucide-react"
+import { CheckCheckIcon, LinkIcon, StarIcon } from "lucide-react"
 import { StarRating } from "@/components/star-rating";
 import { Button } from "@/components/ui/button";
 
 // TODO: Modify this component to fit the style
 import { Progress } from "@/components/ui/progress";
+import { toast } from "sonner";
 // import { CartButton } from "@/components/cart-button";
 
 const CartButton = dynamic(
@@ -32,6 +33,8 @@ const CartButton = dynamic(
 export const ProductView = ({ productId, tenantSubdomain }: ProductViewProps) => {
     const trpc = useTRPC();
     const { data } = useSuspenseQuery(trpc.products.getOne.queryOptions({ id: productId }));
+
+    const [isCopied, setIsCopied] = useState<boolean>(false)
 
     return (
         <div className='px-4 lg:px-12 py-10'>
@@ -61,19 +64,19 @@ export const ProductView = ({ productId, tenantSubdomain }: ProductViewProps) =>
                                     <p className='text-base underline font-medium'>{data.tenant.name}</p>
                                 </Link>
                             </div>
+
                             <div className='hidden lg:flex px-6 py-4 items-center justify-center'>
-                                <div className='flex items-center gap-1'>
-                                    {/* TODO: Remove hardcoded rating*/}
-                                    <StarRating rating={3.5} iconClassName='size-4'/>
+                                <div className='flex items-center gap-2'>
+                                    <StarRating rating={data.reviewRating} iconClassName='size-4'/>
+                                    <p className='text-base font-medium'>{data.reviewCount} {data.reviewCount <= 1 ? 'rating' : 'ratings'}</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div className='block lg:hidne px-6 py-4 items-center justify-center border-b'>
-                            <div className='flex items-center gap-1'>
-                                {/* TODO: Remove hardcoded rating*/}
-                                <StarRating rating={3.5} iconClassName='size-4'/>
-                                <p className='text-base font-medium'>{5} ratings</p>
+                        <div className='block lg:hidden px-6 py-4 items-center justify-center border-b'>
+                            <div className='flex items-center gap-2'>
+                                <StarRating rating={data.reviewRating} iconClassName='size-4'/>
+                                <p className='text-base font-medium'>{data.reviewCount} {data.reviewCount <= 1 ? 'rating' : 'ratings'}</p>
                             </div>
                         </div>
 
@@ -92,8 +95,16 @@ export const ProductView = ({ productId, tenantSubdomain }: ProductViewProps) =>
                                 <div className='flex flex-row items-center gap-2'>
                                     <CartButton isPurchased={data.isPurchased} tenantSubdomain={tenantSubdomain} productId={productId} />
 
-                                    <Button className='size-12' variant='elevated' onClick={() => {}} disabled={false}>
-                                        <LinkIcon />
+                                    <Button className='size-12' variant='elevated'
+                                            onClick={() => {
+                                                setIsCopied(true);
+                                                navigator.clipboard.writeText(window.location.href!);
+                                                toast.success("Link copied to clipboard");
+
+                                                setTimeout(() => setIsCopied(false), 1300);
+                                            }}
+                                            disabled={isCopied}>
+                                        {isCopied ? <CheckCheckIcon /> : <LinkIcon />}
                                     </Button>
                                 </div>
 
@@ -105,11 +116,12 @@ export const ProductView = ({ productId, tenantSubdomain }: ProductViewProps) =>
                             <div className='p-6'>
                                 <div className='flex items-center justify-between'>
                                     <h3 className='text-xl font-medium'>Ratings</h3>
+
                                     <div className='flex items-center gap-x-1 font-medium'>
                                         <StarIcon className='size-4 fill-black' />
+                                        <p>({data.reviewRating})</p>
 
-                                        <p>({5})</p>
-                                        <p className='text-base'>{134} ratings</p>
+                                        <p className='text-base'>{data.reviewCount} {data.reviewCount <= 1 ? 'rating' : 'ratings'}</p>
                                     </div>
                                 </div>
 
@@ -120,8 +132,11 @@ export const ProductView = ({ productId, tenantSubdomain }: ProductViewProps) =>
                                                 {stars} {stars === 1 ? "star" : "stars"}
                                             </div>
 
-                                            <Progress value={25} className='h-[1lh]' />
-                                            <div className='font-medium'>{25}%</div>
+                                            <Progress value={data.ratingDistribution[stars]} className='h-[1lh]' />
+
+                                            <div className='font-medium'>
+                                                {data.ratingDistribution[stars]}%
+                                            </div>
                                         </React.Fragment>
                                     ))}
                                 </div>

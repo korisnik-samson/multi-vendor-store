@@ -34,7 +34,7 @@ export const LibraryProductList = () => {
                 {data?.pages.flatMap((page) => page.docs).map((product) => (
                     <LibraryProductCard key={product.id} id={product.id} name={product.name}
                                  imageUrl={product.image?.url} tenantImageUrl={product.tenant?.image?.url} tenantSubDomain={product.tenant.subdomain}
-                                 reviewRating={3} reviewCount={5} price={product.price} />
+                                 reviewRating={product.reviewRating} reviewCount={product.reviewCount} price={product.price} />
                 ))}
             </div>
 
