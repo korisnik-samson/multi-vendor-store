@@ -20,6 +20,7 @@ import { connectionCredentials } from "@/lib/utils";
 import dotenv from "dotenv"
 import { Config } from "@/payload-types";
 import { Orders } from "@/collections/Orders";
+import { Reviews } from "@/collections/Reviews";
 
 const filename: string = fileURLToPath(import.meta.url)
 const dirname: string = path.dirname(filename)
@@ -36,7 +37,7 @@ export default buildConfig({
             baseDir: path.resolve(dirname),
         },
     },
-    collections: [Users, Media, Categories, Products, Tags, Tenants, Orders],
+    collections: [Users, Media, Categories, Products, Tags, Tenants, Orders, Reviews],
     // cookiePrefix: 'biblioteka',
     editor: lexicalEditor(),
     secret: process.env.NEXT_PUBLIC_PAYLOAD_SECRET! || connectionCredentials.payloadSecret!,

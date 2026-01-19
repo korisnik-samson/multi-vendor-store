@@ -3,6 +3,7 @@ import { CategoriesGetManyOutput } from "@/modules/categories/types";
 import type { SearchParams } from "nuqs/server";
 import { string } from "zod";
 import Stripe from "stripe";
+import { ReviewsGetOneOutput } from "@/modules/reviews/types";
 
 export interface NavbarItemProps {
     href: string;
@@ -233,6 +234,26 @@ export type ExpandedLineItem = Stripe.LineItem & {
     }
 }
 
-export interface LibraryViewProps {
+export interface LibraryProductPageProps {
+    params: Promise<{ productId: string }>;
+}
 
+export interface LibraryProductViewProps {
+    productId: string;
+}
+
+export interface ReviewSidebarProps {
+    productId: string;
+}
+
+export interface ReviewFormProps {
+    productId: string;
+    initialData?: ReviewsGetOneOutput;
+}
+
+export interface StarPickerProps {
+    value?: number;
+    onChange?: (value: number) => void;
+    disabled?: boolean;
+    className?: string;
 }

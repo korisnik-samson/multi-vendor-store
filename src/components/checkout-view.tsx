@@ -3,7 +3,7 @@
 import { CheckoutViewProps } from "@/types";
 import { useTRPC } from "@/trpc/client";
 import { useCart } from "@/modules/checkout/hooks/use-cart";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { generateTenantURL } from "@/lib/utils";
@@ -16,9 +16,11 @@ import { useRouter } from "next/navigation";
 export const CheckoutView = ({ tenantSubdomain }: CheckoutViewProps) => {
     const router = useRouter();
 
+    const trpc = useTRPC();
+    const queryClient = useQueryClient();
+
     const [states, setStates] = useCheckoutStates();
     const { productIds, removeProduct, clearCart } = useCart(tenantSubdomain);
-    const trpc = useTRPC();
 
     const { data, error, isLoading } = useQuery(trpc.checkout.getProducts.queryOptions({
         ids: productIds
@@ -26,7 +28,7 @@ export const CheckoutView = ({ tenantSubdomain }: CheckoutViewProps) => {
 
     const purchase = useMutation(trpc.checkout.purchase.mutationOptions({
         onMutate: () => {
-            setStates({ cancel: false, success: false })
+            setStates({ success: false, cancel: false })
         },
         onSuccess: (data) => {
             // @ts-ignore
@@ -43,15 +45,14 @@ export const CheckoutView = ({ tenantSubdomain }: CheckoutViewProps) => {
     useEffect(() => {
         if (states.success) {
             toast.success("Your order was successfully placed");
-            setStates({ cancel: false, success: false });
+            setStates({ success: false, cancel: false });
 
             clearCart();
+            queryClient.invalidateQueries(trpc.library.getMany.infiniteQueryFilter());
 
-            // TODO: Invalidate library cache
-
-            router.push("/products");
+            router.push("/library");
         }
-    }, [states.success, clearCart, router, setStates]);
+    }, [states.success, clearCart, router, setStates, queryClient, trpc.library.getMany]);
 
     useEffect(() => {
         if (error?.data?.code === "NOT_FOUND") {

@@ -16,3 +16,8 @@ export const registerSchema = z.object({
             "Username cannot contain consecutive hyphens.")
         .transform((value) => value.toLowerCase()),
 });
+
+export const reviewFormSchema = z.object({
+    rating: z.number().min(1, { message: "Ratings are required" }).max(5),
+    description: z.string().min(1, { message: "Descriptions are required" }),
+});
