@@ -1,17 +1,18 @@
 import type { CollectionConfig } from "payload";
+import { isSuperAdmin } from "@/lib/access";
 
 export const Categories: CollectionConfig = {
     slug: "categories",
     admin: {
         useAsTitle: "name",
+        hidden: ({ user }) => !isSuperAdmin(user),
     },
-    /*access: {
-        read: ({ req }) => req.user.isAdmin,
-        create: ({ req }) => req.user.isAdmin,
-        update: ({ req }) => req.user.isAdmin,
-        delete: ({ req }) => req.user.isAdmin,
-    },*/
-
+    access: {
+        read: () => true,
+        create: ({ req }) => isSuperAdmin(req.user),
+        update: ({ req }) => isSuperAdmin(req.user),
+        delete: ({ req }) => isSuperAdmin(req.user),
+    },
     fields: [
         {
             name: "name",

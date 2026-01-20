@@ -21,6 +21,7 @@ import dotenv from "dotenv"
 import { Config } from "@/payload-types";
 import { Orders } from "@/collections/Orders";
 import { Reviews } from "@/collections/Reviews";
+import { isSuperAdmin } from "@/lib/access";
 
 const filename: string = fileURLToPath(import.meta.url)
 const dirname: string = path.dirname(filename)
@@ -57,7 +58,7 @@ export default buildConfig({
             tenantsArrayField: {
                 includeDefaultField: false
             },
-            userHasAccessToAllTenants: (user) => Boolean(user?.roles?.includes('super-admin')),
+            userHasAccessToAllTenants: (user) => isSuperAdmin(user),
         })
         // storage-adapter-placeholder
     ],
