@@ -4,6 +4,7 @@ import config from "@/payload.config"
 import dotenv from "dotenv"
 import { fileURLToPath } from "url";
 import path from "path";
+import { stripe } from "@/lib/stripe";
 
 const filename: string = fileURLToPath(import.meta.url)
 const dirname: string = path.dirname(filename)
@@ -151,6 +152,7 @@ const categories = [
 
 const seed = async () => {
     const payload = await getPayload({ config });
+    const adminStripeAccount = await stripe.accounts.create({})
 
     // create super-admin tenant
     const adminTenant = await payload.create({
@@ -158,7 +160,8 @@ const seed = async () => {
         data: {
             name: "admin",
             subdomain: "admin",
-            stripeAccountId: "admin",
+            // stripeAccountId: "admin" revert to this if any problems with admin generation and stripe account,
+            stripeAccountId: adminStripeAccount.id,
         }
     })
 
@@ -166,8 +169,8 @@ const seed = async () => {
     await payload.create({
         collection: "users",
         data: {
-            email: process.env.NEXT_PUBLIC_SUPERADMIN_EMAIL!,
-            password: process.env.NEXT_PUBLIC_SUPERADMIN_PASSWORD!,
+            email: process.env.SUPERADMIN_EMAIL!,
+            password: process.env.SUPERADMIN_PASSWORD!,
             roles: ['super-admin'],
             username: 'admin',
             tenants: [
