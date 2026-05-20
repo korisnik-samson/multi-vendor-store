@@ -10,6 +10,14 @@ const nextConfig: NextConfig = {
     typescript: {
         ignoreBuildErrors: true,
     },
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: '**.citrixgate.org',
+            },
+        ],
+    },
 };
 
 export default withPayload(nextConfig);
