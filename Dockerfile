@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM node:22.14-alpine AS build
+FROM node:22.14.0-alpine AS build
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
@@ -16,7 +16,7 @@ ENV NODE_ENV=production
 RUN npm run build
 
 # Stage 2: Production runner
-FROM node:22.14-alpine AS runner
+FROM node:22.14.0-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
