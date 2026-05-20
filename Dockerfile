@@ -8,10 +8,15 @@ RUN npm install --legacy-peer-deps
 
 # Copy source and build
 COPY . .
+<<<<<<< HEAD
+
+
+=======
 # Payload needs these during build for type generation/etc
 ENV NEXT_PUBLIC_PAYLOAD_SECRET=79d16d91f6716c22e511a648
 ENV NEXT_PUBLIC_DATABASE_URI=mongodb://mongodb:27017/payload
 ENV NODE_ENV=production
+>>>>>>> parent of 4c6a266 (Update Dockerfile)
 
 RUN npm run build
 
