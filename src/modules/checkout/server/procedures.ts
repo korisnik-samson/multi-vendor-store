@@ -68,6 +68,11 @@ export const checkoutRouter = createTRPCRouter({
                         'tenant.subdomain': {
                             equals: input.tenantSubdomain
                         }
+                    },
+                    {
+                        isArchived: {
+                            not_equals: true
+                        }
                     }
                 ]
             }
@@ -169,7 +174,21 @@ export const checkoutRouter = createTRPCRouter({
         const data = await ctx.db.find({
             collection: 'products',
             depth: 2, // populate one level of categories and images and tenants and tenant images
-            where: { id: { in: input.ids } },
+            where: {
+                and: [
+                    {
+                        id: {
+                            in: input.ids
+                        }
+                    },
+                    {
+                        isArchived: {
+                            not_equals: true
+                        }
+                    }
+                ],
+
+            },
         });
 
         if (data.totalDocs !== input.ids.length) throw new TRPCError({

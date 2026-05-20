@@ -74,7 +74,7 @@ export const SignUpView = () => {
                             </Button>
                         </div>
 
-                        <TextType text={["Pridružite se preko 1.580 kreatora koji zarađuju na Biblioteku."]} typingSpeed={65} className='text-4xl font-medium'
+                        <TextType text={["Pridružite se preko 1.580 kreatora koji zarađuju na Biblioteci."]} typingSpeed={65} className='text-4xl font-medium'
                                   pauseDuration={12000} showCursor={true} cursorCharacter= {'\u258E'}/>
 
                         <FormField name='username' render={({ field }) => (

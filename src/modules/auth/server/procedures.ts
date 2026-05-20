@@ -36,7 +36,19 @@ export const authRouter = createTRPCRouter({
                 message: 'Username already taken • Please choose another one'
             });
 
-            const account = await stripe.accounts.create({});
+            // const account = await stripe.accounts.create({});
+
+            // TODO: Keep an eye out for this, but revert to previous
+            const account = await stripe.accounts.create({
+                type: 'express',
+                capabilities: {
+                    card_payments: { requested: true },
+                    transfers: { requested: true },
+                },
+                business_profile: {
+                    name: input.username,
+                }
+            });
 
             if (!account) throw new TRPCError({
                 code: 'BAD_REQUEST',

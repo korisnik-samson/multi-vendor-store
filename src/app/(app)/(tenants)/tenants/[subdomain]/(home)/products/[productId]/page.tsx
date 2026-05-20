@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { ProductPageProps } from "@/types";
 import { getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
-import { ProductView } from '@/components/product-view';
+import { ProductView, ProductViewSkeleton } from '@/components/product-view';
 
 const Page = async ({ params }: ProductPageProps) => {
     const { productId, subdomain } = await params;
@@ -15,7 +15,9 @@ const Page = async ({ params }: ProductPageProps) => {
 
     return (
         <HydrationBoundary state={dehydrate(queryClient)}>
-            <ProductView productId={productId} tenantSubdomain={subdomain} />
+            <Suspense fallback={<ProductViewSkeleton />}>
+                <ProductView productId={productId} tenantSubdomain={subdomain} />
+            </Suspense>
         </HydrationBoundary>
     );
 }

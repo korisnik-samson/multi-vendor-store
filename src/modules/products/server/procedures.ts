@@ -5,6 +5,7 @@ import type { Sort, Where } from "payload";
 import { Category, Media, Tenant } from "@/payload-types";
 import { sortValues } from "@/modules/products/search-params";
 import { DEFAULT_LIMIT } from "@/constants";
+import { TRPCError } from "@trpc/server";
 
 export const productsRouter = createTRPCRouter({
     getOne: baseProcedure.input(
@@ -23,6 +24,11 @@ export const productsRouter = createTRPCRouter({
                 content: false,
             }
         });
+
+        if (product.isArchived) throw new TRPCError({
+            code: 'NOT_FOUND',
+            message: 'Product not found'
+        })
 
         let isPurchased = false;
 
@@ -97,7 +103,12 @@ export const productsRouter = createTRPCRouter({
             tenantSlug: z.string().nullable().optional(),
         })
     ).query(async ({ ctx, input }) => {
-        const where: Where = { price: {} };
+        const where: Where = {
+            // price: {},
+            isArchived: {
+                not_equals: true,
+            }
+        };
 
         let sort: Sort = "-createdAt"
 
