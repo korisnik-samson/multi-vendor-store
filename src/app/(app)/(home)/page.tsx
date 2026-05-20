@@ -6,6 +6,8 @@ import { loadProductFilters } from "@/modules/products/search-params";
 import { ProductListView } from "@/components/views/product-list-view";
 import { DEFAULT_LIMIT } from "@/constants";
 
+export const dynamic = 'force-dynamic';
+
 const Page = async ({ searchParams }: CategoryProps) => {
     const filters = await loadProductFilters(searchParams);
 

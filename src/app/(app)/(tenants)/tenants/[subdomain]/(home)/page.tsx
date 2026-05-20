@@ -8,6 +8,8 @@ import { DEFAULT_LIMIT } from "@/constants";
 import { TenantsPageProps } from "@/types";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
+export const dynamic = 'force-dynamic';
+
 const Page = async ({ params, searchParams }: TenantsPageProps) => {
     const { subdomain } = await params;
     const filters = await loadProductFilters(searchParams);
