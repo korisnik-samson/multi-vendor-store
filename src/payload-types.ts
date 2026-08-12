@@ -227,7 +227,21 @@ export interface Product {
   id: string;
   tenant?: (string | null) | Tenant;
   name: string;
-  description?: string | null;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   /**
    * Price in RSD
    */
@@ -239,7 +253,33 @@ export interface Product {
   /**
    * Protected content. Only visible to customers after purchase. Add product documentation, downloadable filed, getting started guides, and bonus materials. Supports Markdown formatting.
    */
+<<<<<<< Updated upstream
   content?: string | null;
+=======
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Check if you wish to delete or archive this product. Archived products will not be visible to customers, only to you
+   */
+  isArchived?: boolean | null;
+  /**
+   * Check if you wish this product not to be visible to the public storefront
+   */
+  isPrivate?: boolean | null;
+>>>>>>> Stashed changes
   updatedAt: string;
   createdAt: string;
 }
@@ -436,6 +476,11 @@ export interface ProductsSelect<T extends boolean = true> {
   image?: T;
   refundPolicy?: T;
   content?: T;
+<<<<<<< Updated upstream
+=======
+  isArchived?: T;
+  isPrivate?: T;
+>>>>>>> Stashed changes
   updatedAt?: T;
   createdAt?: T;
 }

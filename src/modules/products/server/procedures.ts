@@ -122,7 +122,11 @@ export const productsRouter = createTRPCRouter({
                 less_than_equal: input.maxPrice
             }
 
+        // if we are loading products for public storefront (no tenantSubdomain
+        // make sure not to load products set to isprivate: true using not-equals logic
+        // These are products private to the tenant store
         if (input.tenantSlug) where["tenant.subdomain"] = { equals: input.tenantSlug } // TODO: or tenant.slug
+        else where["isPrivate"] = { not_equals: true }
 
         if (input.category) {
             const categoriesData = await ctx.db.find({

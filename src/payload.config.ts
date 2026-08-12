@@ -1,7 +1,7 @@
 // storage-adapter-import-placeholder
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { lexicalEditor, UploadFeature } from '@payloadcms/richtext-lexical'
 import { multiTenantPlugin } from "@payloadcms/plugin-multi-tenant";
 import path from 'path'
 import { buildConfig } from 'payload'
@@ -43,7 +43,21 @@ export default buildConfig({
     },
     collections: [Users, Media, Categories, Products, Tags, Tenants, Orders, Reviews],
     // cookiePrefix: 'biblioteka',
-    editor: lexicalEditor(),
+    editor: lexicalEditor({
+        features: ({ defaultFeatures }) => [
+            ...defaultFeatures,
+            UploadFeature({
+                collections: {
+                    media: {
+                        fields: [{
+                            name: "alt",
+                            type: "text",
+                        }]
+                    }
+                }
+            })
+        ]
+    }),
     secret: process.env.NEXT_PUBLIC_PAYLOAD_SECRET! || connectionCredentials.payloadSecret!,
     typescript: {
         outputFile: path.resolve(dirname, 'payload-types.ts'),
@@ -56,7 +70,12 @@ export default buildConfig({
         payloadCloudPlugin(),
         multiTenantPlugin<Config>({
             collections: {
-                products: {}
+                products: {},
+                // this part here is quite controversial...
+                // comment out media if it causes issues with the upload feature,
+                // but it should be fine as long as you don't have any media that's shared between tenants.
+                // once that is done, take out the arguments in lexicalEditor() for the editor object
+                media: {},
             },
             tenantsArrayField: {
                 includeDefaultField: false

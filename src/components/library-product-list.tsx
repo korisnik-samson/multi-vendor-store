@@ -4,12 +4,10 @@ import React from "react";
 
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseInfiniteQuery, /*useSuspenseQuery*/ } from "@tanstack/react-query";
-import { ProductListProps } from "@/types";
 import { LibraryProductCard, LibraryProductCardSkeleton } from "@/components/library-product-card";
 import { DEFAULT_LIMIT } from "@/constants";
 import { Button } from "@/components/ui/button";
 import { InboxIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 export const LibraryProductList = () => {
     const trpc = useTRPC();

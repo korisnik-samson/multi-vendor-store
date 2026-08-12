@@ -8,7 +8,8 @@ export const Media: CollectionConfig = {
         delete: ({ req }) => isSuperAdmin(req.user),
     },
     admin: {
-        hidden: ({ user }) => !isSuperAdmin(user)
+        // commented out to allow uploads for post purchase content
+        // hidden: ({ user }) => !isSuperAdmin(user)
     },
     fields: [
         {

@@ -27,7 +27,7 @@ export const Products: CollectionConfig = {
         },
         {
             name: "description",
-            type: "text",
+            type: "richText",
         },
         {
             name: "price",
@@ -63,11 +63,49 @@ export const Products: CollectionConfig = {
         {
             name: 'content',
             // TODO: Use richtext when Payload supports saving richtext in a way that can be rendered safely on the frontend.
-            type: "textarea",
+            type: "richText",
+            /*editor: lexicalEditor({
+                features: ({ defaultFeatures }) => [
+                    ...defaultFeatures,
+                    UploadFeature({
+                        collections: {
+                            media: {
+                                fields: [{
+                                    name: "name",
+                                    type: "text",
+                                }]
+                            }
+                        }
+                    })
+                ]
+            }),*/
             admin: {
                 description: "Protected content. Only visible to customers after purchase. Add product documentation, downloadable filed, getting started guides, and bonus" +
                     " materials. Supports Markdown formatting."
             }
+<<<<<<< Updated upstream
+=======
+        },
+        {
+            name: "isArchived",
+            label: "Archive",
+            defaultValue: false,
+            type: "checkbox",
+            admin: {
+                description: "Check if you wish to delete or archive this product. Archived products will not be visible to customers, only to you"
+            }
+
+        },
+        {
+            name: "isPrivate",
+            label: "Private",
+            defaultValue: false,
+            type: "checkbox",
+            admin: {
+                description: "Check if you wish this product not to be visible to the public storefront"
+            }
+
+>>>>>>> Stashed changes
         }
     ],
 }

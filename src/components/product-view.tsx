@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 // TODO: Modify this component to fit the style
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
+import { defaultJSXConverters, RichText } from "@payloadcms/richtext-lexical/react";
 // import { CartButton } from "@/components/cart-button";
 
 const CartButton = dynamic(
@@ -54,7 +55,7 @@ export const ProductView = ({ productId, tenantSubdomain }: ProductViewProps) =>
                                     <p className='text-base font-medium'>{formatCurrency(data.price)}</p>
                                 </div>
                             </div>
-                            
+
                             <div className='px-6 py-4 flex items-center justify-center lg:border-r'>
                                 <Link href={generateTenantURL(tenantSubdomain)} className='flex items-center gap-2'>
                                     {data.tenant.image?.url && (
@@ -82,7 +83,7 @@ export const ProductView = ({ productId, tenantSubdomain }: ProductViewProps) =>
 
                         <div className='p-6'>
                             {data.description ? (
-                                <p>{data.description}</p>
+                                <RichText data={data.description} converters={defaultJSXConverters}/>
                             ) : (
                                 <p className='font-medium text-muted-foreground italic'>No description available</p>
                             )}
