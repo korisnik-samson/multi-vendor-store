@@ -186,6 +186,7 @@ export interface Tenant {
  */
 export interface Media {
   id: string;
+  tenant?: (string | null) | Tenant;
   alt: string;
   updatedAt: string;
   createdAt: string;
@@ -253,9 +254,6 @@ export interface Product {
   /**
    * Protected content. Only visible to customers after purchase. Add product documentation, downloadable filed, getting started guides, and bonus materials. Supports Markdown formatting.
    */
-<<<<<<< Updated upstream
-  content?: string | null;
-=======
   content?: {
     root: {
       type: string;
@@ -279,7 +277,6 @@ export interface Product {
    * Check if you wish this product not to be visible to the public storefront
    */
   isPrivate?: boolean | null;
->>>>>>> Stashed changes
   updatedAt: string;
   createdAt: string;
 }
@@ -436,6 +433,7 @@ export interface UsersSelect<T extends boolean = true> {
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
+  tenant?: T;
   alt?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -476,11 +474,8 @@ export interface ProductsSelect<T extends boolean = true> {
   image?: T;
   refundPolicy?: T;
   content?: T;
-<<<<<<< Updated upstream
-=======
   isArchived?: T;
   isPrivate?: T;
->>>>>>> Stashed changes
   updatedAt?: T;
   createdAt?: T;
 }

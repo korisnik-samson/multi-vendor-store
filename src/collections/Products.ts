@@ -83,8 +83,7 @@ export const Products: CollectionConfig = {
                 description: "Protected content. Only visible to customers after purchase. Add product documentation, downloadable filed, getting started guides, and bonus" +
                     " materials. Supports Markdown formatting."
             }
-<<<<<<< Updated upstream
-=======
+
         },
         {
             name: "isArchived",
@@ -104,8 +103,6 @@ export const Products: CollectionConfig = {
             admin: {
                 description: "Check if you wish this product not to be visible to the public storefront"
             }
-
->>>>>>> Stashed changes
         }
     ],
 }

@@ -6,7 +6,7 @@ import { LibraryProductViewProps } from "@/types";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 import { ReviewSidebar } from "@/components/review-sidebar";
-import {RichText} from "@payloadcms/richtext-lexical/react";
+import {defaultJSXConverters, RichText} from "@payloadcms/richtext-lexical/react";
 import {Suspense} from "react";
 import {ReviewFormSkeleton} from "@/components/review-form";
 
@@ -44,7 +44,7 @@ export const LibraryProductView = ({ productId }: LibraryProductViewProps) => {
 
                     <div className='lg:col-span-5'>
                         {data.content ? (
-                            <RichText data={data.content} />
+                            <RichText data={data.description} converters={defaultJSXConverters} />
                         ) :
                         (<p className='font-medium italic text-muted-foreground'>
                             No special content
