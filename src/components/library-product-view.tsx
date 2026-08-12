@@ -44,7 +44,7 @@ export const LibraryProductView = ({ productId }: LibraryProductViewProps) => {
 
                     <div className='lg:col-span-5'>
                         {data.content ? (
-                            <RichText data={data.description} converters={defaultJSXConverters} />
+                            <RichText data={data.description!} converters={defaultJSXConverters} />
                         ) :
                         (<p className='font-medium italic text-muted-foreground'>
                             No special content
