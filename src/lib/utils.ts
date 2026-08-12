@@ -30,7 +30,13 @@ export const formatAsCurrency = (value: string) => {
 }
 
 export function generateTenantURL(tenantSubdomain: string) {
-    return `/tenants/${tenantSubdomain}`
+    if (process.env.NODE_ENV === 'development')
+        return `${process.env.NEXT_PUBLIC_APP_URL}/tenants/${tenantSubdomain}`
+
+    let protocol = 'https';
+    const domain = process.env.NEXT_PUBLIC_ROOT_DOMAIN!;
+
+    return `${protocol}://${tenantSubdomain}.${domain}`
 }
 
 export function formatCurrency(value: number | string) {
@@ -38,5 +44,6 @@ export function formatCurrency(value: number | string) {
         style: "currency",
         currency: "RSD",
         minimumFractionDigits: 2,
+
     }).format(Number(value))
 }

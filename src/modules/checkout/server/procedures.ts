@@ -8,6 +8,7 @@ import { CheckoutMetadata, ProductMetadata } from "@/types";
 import { stripe } from "@/lib/stripe";
 import { headers as getHeaders } from "next/dist/server/request/headers";
 import { PLATFORM_FEE_PERCENTAGE } from "@/constants";
+import {generateTenantURL} from "@/lib/utils";
 
 export const checkoutRouter = createTRPCRouter({
     verify: protectedProcedure.mutation(async ({ ctx }) => {
@@ -126,21 +127,25 @@ export const checkoutRouter = createTRPCRouter({
             }
         }));
 
-        const headers = await getHeaders();
+        // const headers = await getHeaders();
 
-        const host = headers.get("host");
-        const protocol = process.env.NODE_ENV === "development" ? "http" : "https";
+        // const host = headers.get("host");
+        // const protocol = process.env.NODE_ENV === "development" ? "http" : "https";
 
-        const origin = `${protocol}://${host}`;
+        // const origin = `${protocol}://${host}`;
+
+        let domain = generateTenantURL(input.tenantSubdomain);
 
         const checkout = await stripe.checkout.sessions.create({
             customer_email: ctx.session.user.email || undefined,
 
             // success_url: `${process.env.NEXT_PUBLIC_APP_URL}/tenants/${input.tenantSubdomain}/checkout?success=true`,
-            success_url: `${origin}/tenants/${input.tenantSubdomain}/checkout?success=true`,
+            // success_url: `${origin}/tenants/${input.tenantSubdomain}/checkout?success=true`,
+            success_url: `${domain}/checkout?success=true`,
 
             // cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/tenants/${input.tenantSubdomain}/checkout?cancel=true`,
-            cancel_url: `${origin}/tenants/${input.tenantSubdomain}/checkout?cancel=true`,
+            // cancel_url: `${origin}/tenants/${input.tenantSubdomain}/checkout?cancel=true`,
+            cancel_url: `${domain}/checkout?cancel=true`,
 
             mode: 'payment',
             line_items: lineItems,
