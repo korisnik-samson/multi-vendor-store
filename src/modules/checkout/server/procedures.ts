@@ -134,6 +134,7 @@ export const checkoutRouter = createTRPCRouter({
 
         // const origin = `${protocol}://${host}`;
 
+        // all that shit is done in here... might want to have a look when deployed
         let domain = generateTenantURL(input.tenantSubdomain);
 
         const checkout = await stripe.checkout.sessions.create({

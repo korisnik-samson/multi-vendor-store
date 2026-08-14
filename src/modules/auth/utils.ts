@@ -17,9 +17,13 @@ export const generateAuthCookie = async ({ prefix, value }: Props): Promise<void
         httpOnly: true,
         path: "/",
         maxAge: 60 * 60 * 24 * 14,
-        // TODO: Ensure cross-domain cookie sharing
-        sameSite: "none",
-        domain: process.env.NEXT_PUBLIC_ROOT_DOMAIN,
-        secure: process.env.NODE_ENV === "production",
+        // Ensure cross-domain cookie sharing
+        // this works with cookie auth on local development and production environments
+        // but it will not work with subdomains turned on
+        ...(process.env.NODE_ENV !== "development" && {
+            sameSite: "none",
+            domain: process.env.NEXT_PUBLIC_ROOT_DOMAIN,
+            secure: true
+        })
     });
 }

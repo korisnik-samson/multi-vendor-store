@@ -30,7 +30,10 @@ export const formatAsCurrency = (value: string) => {
 }
 
 export function generateTenantURL(tenantSubdomain: string) {
-    if (process.env.NODE_ENV === 'development')
+    const isDevelopment: boolean = process.env.NODE_ENV === 'development';
+    const isSubdomainRoutingEnabled: boolean = process.env.NEXT_PUBLIC_SUBDOMAIN_ROUTING_ENABLED === 'true';
+
+    if (isDevelopment || !isSubdomainRoutingEnabled)
         return `${process.env.NEXT_PUBLIC_APP_URL}/tenants/${tenantSubdomain}`
 
     let protocol = 'https';

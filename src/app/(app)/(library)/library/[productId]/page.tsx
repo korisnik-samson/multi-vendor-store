@@ -6,6 +6,8 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { LibraryProductPageProps } from "@/types";
 import {LibraryProductView, LibraryProductViewSkeleton} from "@/components/library-product-view";
 
+export const dynamic = 'force-dynamic';
+
 const Page = async ({ params }: LibraryProductPageProps) => {
     const queryClient = getQueryClient();
     const { productId } = await params;
